@@ -1,4 +1,5 @@
 const User = require('../models/User')
+const Mission = require('../models/Mission.js')
 const { generateToken } = require('../helpers/jwt')
 const { hashing, compare } = require('../helpers/bcrypt')
 
@@ -76,6 +77,56 @@ class UserController {
           photo: ops[0].photo,
           lastOnline: ops[0].lastOnline,
           createdAt: ops[0].createdAt,
+        },
+      })
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  static async getUserById(req, res, next) {
+    try {
+      const user = req.user
+      res.status(200).json({
+        user: {
+          name: user.name,
+          statistic: user.statistic,
+          level: user.level,
+          currentExperience: user.currentExperience,
+          activeMissions: user.activeMissions,
+          missionPool: user.missionPool,
+          maxActiveMissions: user.maxActiveMissions,
+          photo: user.photo,
+          lastOnline: user.lastOnline,
+          createdAt: user.createdAt,
+        },
+      })
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  static async dailyReset(req, res, next) {
+    try {
+      const missions = await Mission.findAll()
+      const { _id } = req.user
+      const updated = await User.resetDaily({
+        _id,
+        missionPool: missions
+      })
+      console.log(updated.value)
+      res.status(200).json({
+        user: {
+          name: updated.value.name,
+          statistic: updated.value.statistic,
+          level: updated.value.level,
+          currentExperience: updated.value.currentExperience,
+          activeMissions: updated.value.activeMissions,
+          missionPool: updated.value.missionPool,
+          maxActiveMissions: updated.value.maxActiveMissions,
+          photo: updated.value.photo,
+          lastOnline: updated.value.lastOnline,
+          createdAt: updated.value.createdAt,
         },
       })
     } catch (err) {

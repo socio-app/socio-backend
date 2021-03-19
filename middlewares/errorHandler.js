@@ -14,7 +14,7 @@ module.exports = (err, _, res, next) => {
       message = 'Requested todo was not found'
       break
 
-    case 'error_403_todo_forbidden':
+    case 'error_403_user_forbidden':
       //ini contoh
       statusCode = 403
       errorCode = 'Forbidden access'
