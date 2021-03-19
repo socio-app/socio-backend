@@ -144,7 +144,78 @@ class UserController {
         activeMissions,
         missionPool
       })
-      res.status(200).json('Success brohh')
+      res.status(200).json({
+        user: {
+          name: updated.value.name,
+          statistic: updated.value.statistic,
+          level: updated.value.level,
+          currentExperience: updated.value.currentExperience,
+          activeMissions: updated.value.activeMissions,
+          missionPool: updated.value.missionPool,
+          maxActiveMissions: updated.value.maxActiveMissions,
+          photo: updated.value.photo,
+          lastOnline: updated.value.lastOnline,
+          createdAt: updated.value.createdAt,
+        },
+      })
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  static async levelUp(req, res, next) {
+    try {
+      const { _id } = req.user
+      const { statistic, activeMissions, level, experience } = req.body
+      const updated = await User.levelUp({
+        _id,
+        statistic,
+        activeMissions,
+        level,
+        experience
+      })
+      res.status(200).json({
+        user: {
+          name: updated.value.name,
+          statistic: updated.value.statistic,
+          level: updated.value.level,
+          currentExperience: updated.value.currentExperience,
+          activeMissions: updated.value.activeMissions,
+          missionPool: updated.value.missionPool,
+          maxActiveMissions: updated.value.maxActiveMissions,
+          photo: updated.value.photo,
+          lastOnline: updated.value.lastOnline,
+          createdAt: updated.value.createdAt,
+        },
+      })
+    } catch (err) {
+      next(err)
+    }
+  }
+  static async expIncrease(req, res, next) {
+    try {
+      const { _id } = req.user
+      const { statistic, activeMissions, experience } = req.body
+      const updated = await User.expIncrease({
+        _id,
+        statistic,
+        activeMissions,
+        experience
+      })
+      res.status(200).json({
+        user: {
+          name: updated.value.name,
+          statistic: updated.value.statistic,
+          level: updated.value.level,
+          currentExperience: updated.value.currentExperience,
+          activeMissions: updated.value.activeMissions,
+          missionPool: updated.value.missionPool,
+          maxActiveMissions: updated.value.maxActiveMissions,
+          photo: updated.value.photo,
+          lastOnline: updated.value.lastOnline,
+          createdAt: updated.value.createdAt,
+        },
+      })
     } catch (err) {
       next(err)
     }

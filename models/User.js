@@ -41,6 +41,38 @@ class User {
       { returnOriginal: false }
     )
   }
+
+  static async levelUp(payload) {
+    return getDatabase().collection('users').findOneAndUpdate(
+      {
+        _id: ObjectId(payload._id)
+      },
+      {
+        $set: {
+          statistic: payload.statistic,
+          currentExperience: payload.experience,
+          level: payload.level,
+          activeMissions: payload.activeMissions
+        }
+      },
+      { returnOriginal: false }
+    )
+  }
+  static async expIncrease(payload) {
+    return getDatabase().collection('users').findOneAndUpdate(
+      {
+        _id: ObjectId(payload._id)
+      },
+      {
+        $set: {
+          statistic: payload.statistic,
+          currentExperience: payload.experience,
+          activeMissions: payload.activeMissions
+        }
+      },
+      { returnOriginal: false }
+    )
+  }
 }
 
 module.exports = User
