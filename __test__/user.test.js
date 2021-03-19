@@ -198,7 +198,7 @@ describe('PATCH /users/:id/missionUpdate', function () {
         })
     })
   })
-  
+
   //=====FAILED=====
   describe('Failed PATCH /users/:id/missionUpdate', function () {
     it('should return status 400 with errors due to empty active missions', function (done) {
@@ -227,7 +227,7 @@ describe('PATCH /users/:id/missionUpdate', function () {
         })
     })
 
-    it('should return status 400 with errors due to empty active missions', function (done) {
+    it('should return status 400 with errors due to empty statistic', function (done) {
       request(app)
         .patch('/users/:id/missionUpdate')
         .set({
@@ -261,8 +261,8 @@ describe('PATCH /users/:id/missionUpdate', function () {
         })
         .send({
           statistic,
-          activeMissions = [],
-          missionPool,
+          activeMissions,
+          missionPool = [],
         })
         .end((err, res) => {
           if (err) {
