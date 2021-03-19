@@ -133,6 +133,22 @@ class UserController {
       next(err)
     }
   }
+
+  static async missionUpdate(req, res, next) {
+    try {
+      const { _id } = req.user
+      const { statistic, activeMissions, missionPool } = req.body
+      const updated = await User.missionUpdate({
+        _id,
+        statistic,
+        activeMissions,
+        missionPool
+      })
+      res.status(200).json('Success brohh')
+    } catch (err) {
+      next(err)
+    }
+  }
 }
 
 module.exports = UserController
