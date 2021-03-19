@@ -168,6 +168,143 @@ describe('POST /login', function () {
 })
 
 //punyanya Oki:
+//patch: /users/:id/missionUpdate
+//header: token
+//body: statistic, activeMissions, missionPool (isTaken)
+describe('PATCH /users/:id/missionUpdate', function () {
+  //=====SUCCESSFUL=====
+  describe('Successful PATCH /users/:id/missionUpdate', function () {
+    it('should return status 200 with data', function (done) {
+      request(app)
+        .patch('/users/:id/missionUpdate')
+        .set({
+          access_token,
+        })
+        .send({
+          statistic,
+          activeMissions,
+          missionPool,
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at PATCH /users/:id/missionUpdate test')
+          }
+          expect(res.status).toEqual(200)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('statistic')
+          expect(res.body).toHaveProperty('activeMissions')
+          expect(res.body).toHaveProperty('missionPool')
+          done()
+        })
+    })
+  })
+  
+  //=====FAILED=====
+  describe('Failed PATCH /users/:id/missionUpdate', function () {
+    it('should return status 400 with errors due to empty active missions', function (done) {
+      request(app)
+        .patch('/users/:id/missionUpdate')
+        .set({
+          access_token,
+        })
+        .send({
+          statistic,
+          activeMissions = [],
+          missionPool,
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST login test')
+            done(err)
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('errorCode')
+          expect(res.body.errorCode).toEqual('Validation error')
+          expect(res.body).toHaveProperty('message')
+          expect(res.body.message).toContain('Input invalid')
+          done()
+        })
+    })
+
+    it('should return status 400 with errors due to empty active missions', function (done) {
+      request(app)
+        .patch('/users/:id/missionUpdate')
+        .set({
+          access_token,
+        })
+        .send({
+          statistic = {},
+          activeMissions,
+          missionPool,
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST login test')
+            done(err)
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('errorCode')
+          expect(res.body.errorCode).toEqual('Validation error')
+          expect(res.body).toHaveProperty('message')
+          expect(res.body.message).toContain('Input invalid')
+          done()
+        })
+    })
+
+    it('should return status 400 with errors due to empty mission pool', function (done) {
+      request(app)
+        .patch('/users/:id/missionUpdate')
+        .set({
+          access_token,
+        })
+        .send({
+          statistic,
+          activeMissions = [],
+          missionPool,
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST login test')
+            done(err)
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('errorCode')
+          expect(res.body.errorCode).toEqual('Validation error')
+          expect(res.body).toHaveProperty('message')
+          expect(res.body.message).toContain('Input invalid')
+          done()
+        })
+    })
+
+    it('should return status 401 with errors due to no access_token', function (done) {
+      request(app)
+        .patch('/users/:id/missionUpdate')
+        .send({
+          statistic,
+          activeMissions,
+          missionPool,
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST products test')
+            done(err)
+          }
+          expect(res.status).toEqual(401)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('errorCode')
+          expect(typeof res.body.errorCode).toEqual('string')
+          expect(res.body.errorCode).toEqual('Unauthorized')
+          expect(res.body).toHaveProperty('message')
+          expect(typeof res.body.message).toEqual('string')
+          expect(res.body.message).toContain('Please login first')
+          done()
+        })
+    })
+  })
+})
 
 //punyanya Mukti:
 
@@ -341,3 +478,116 @@ describe(`PATCH /users/${id}/expIncrease`, function() {
 })
 
 //punyanya Adit:
+describe('POST /register', function () {
+  //=====SUCCESSFUL=====
+  describe('Successful POST /register', function () {
+    it('should return status 201 with data', function (done) {
+      request(app)
+        .post('/register')
+        .send({
+          email: 'adit@mail.com',
+          password: '123456',
+          name: 'Adit'
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(201)
+          expect(typeof res.body).toEqual('object')
+          expect(typeof res.body).toHaveProperty('access_token')
+          expect(typeof res.body.access_token).toEqual('string')
+          expect(typeof res.body.user.user).toEqual('object')
+          expect(typeof res.body.user.activeMissions).toEqual('object')
+          expect(typeof res.body.user.missionPoll).toEqual('object')
+          // expect(typeof res.body.id).toEqual('number')
+          // expect(res.body.id).toEqual(id)
+          // expect(res.body).toHaveProperty('email')
+          // expect(typeof res.body.email).toEqual('string')
+          // expect(res.body.email).toEqual(email)
+          // expect(res.body).toHaveProperty('access_token')
+          // expect(typeof res.body.access_token).toEqual('string')
+          done()
+        })
+    })
+  })
+
+  // Failed
+  describe('Failed POST /register', function () {
+    it('should return status 400 because empty email', function (done) {
+      request(app)
+        .post('/register')
+        .send({
+          email: '',
+          password: '123456',
+          name: 'Adit'
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('string')
+          expect(res.body).toEqual('Invalid format input')
+          // expect(typeof res.body.id).toEqual('number')
+          // expect(res.body.id).toEqual(id)
+          // expect(res.body).toHaveProperty('email')
+          // expect(typeof res.body.email).toEqual('string')
+          // expect(res.body.email).toEqual(email)
+          // expect(res.body).toHaveProperty('access_token')
+          // expect(typeof res.body.access_token).toEqual('string')
+          done()
+        })
+    })
+    it('should return status 400 because empty password', function (done) {
+      request(app)
+        .post('/register')
+        .send({
+          email: 'adit@mail.com',
+          password: '',
+          name: 'Adit'
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('string')
+          expect(res.body).toEqual('Invalid format input')
+          // expect(typeof res.body.id).toEqual('number')
+          // expect(res.body.id).toEqual(id)
+          // expect(res.body).toHaveProperty('email')
+          // expect(typeof res.body.email).toEqual('string')
+          // expect(res.body.email).toEqual(email)
+          // expect(res.body).toHaveProperty('access_token')
+          // expect(typeof res.body.access_token).toEqual('string')
+          done()
+        })
+    })
+    it('should return status 400 because empty name', function (done) {
+      request(app)
+        .post('/register')
+        .send({
+          email: 'adit@mail.com',
+          password: '123456',
+          name: ''
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('string')
+          expect(res.body).toEqual('Invalid format input')
+          // expect(typeof res.body.id).toEqual('number')
+          // expect(res.body.id).toEqual(id)
+          // expect(res.body).toHaveProperty('email')
+          // expect(typeof res.body.email).toEqual('string')
+          // expect(res.body.email).toEqual(email)
+          // expect(res.body).toHaveProperty('access_token')
+          // expect(typeof res.body.access_token).toEqual('string')
+          done()
+        })
+    })
+  })
+})
