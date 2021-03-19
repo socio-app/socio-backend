@@ -1,7 +1,17 @@
 const request = require('supertest')
 const { User, sequelize } = require('../models')
 const app = require('../app')
+const { generateToken } = require('../helpers/jwt');
 
+let id;
+let access_token;
+
+beforeAll(() => {
+  access_token = generateToken({
+    id: 1,
+    email: "usertest@mail.com"
+  })
+})
 //==========LOGIN TEST==========
 describe('POST /login', function () {
   //=====SUCCESSFUL=====
@@ -163,3 +173,116 @@ describe('POST /login', function () {
 //punyanya Amil:
 
 //punyanya Adit:
+describe('POST /register', function () {
+  //=====SUCCESSFUL=====
+  describe('Successful POST /register', function () {
+    it('should return status 201 with data', function (done) {
+      request(app)
+        .post('/register')
+        .send({
+          email: 'adit@mail.com',
+          password: '123456',
+          name: 'Adit'
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(201)
+          expect(typeof res.body).toEqual('object')
+          expect(typeof res.body).toHaveProperty('access_token')
+          expect(typeof res.body.access_token).toEqual('string')
+          expect(typeof res.body.user.user).toEqual('object')
+          expect(typeof res.body.user.activeMissions).toEqual('object')
+          expect(typeof res.body.user.missionPoll).toEqual('object')
+          // expect(typeof res.body.id).toEqual('number')
+          // expect(res.body.id).toEqual(id)
+          // expect(res.body).toHaveProperty('email')
+          // expect(typeof res.body.email).toEqual('string')
+          // expect(res.body.email).toEqual(email)
+          // expect(res.body).toHaveProperty('access_token')
+          // expect(typeof res.body.access_token).toEqual('string')
+          done()
+        })
+    })
+  })
+
+  // Failed
+  describe('Failed POST /register', function () {
+    it('should return status 400 because empty email', function (done) {
+      request(app)
+        .post('/register')
+        .send({
+          email: '',
+          password: '123456',
+          name: 'Adit'
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('string')
+          expect(res.body).toEqual('Invalid format input')
+          // expect(typeof res.body.id).toEqual('number')
+          // expect(res.body.id).toEqual(id)
+          // expect(res.body).toHaveProperty('email')
+          // expect(typeof res.body.email).toEqual('string')
+          // expect(res.body.email).toEqual(email)
+          // expect(res.body).toHaveProperty('access_token')
+          // expect(typeof res.body.access_token).toEqual('string')
+          done()
+        })
+    })
+    it('should return status 400 because empty password', function (done) {
+      request(app)
+        .post('/register')
+        .send({
+          email: 'adit@mail.com',
+          password: '',
+          name: 'Adit'
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('string')
+          expect(res.body).toEqual('Invalid format input')
+          // expect(typeof res.body.id).toEqual('number')
+          // expect(res.body.id).toEqual(id)
+          // expect(res.body).toHaveProperty('email')
+          // expect(typeof res.body.email).toEqual('string')
+          // expect(res.body.email).toEqual(email)
+          // expect(res.body).toHaveProperty('access_token')
+          // expect(typeof res.body.access_token).toEqual('string')
+          done()
+        })
+    })
+    it('should return status 400 because empty name', function (done) {
+      request(app)
+        .post('/register')
+        .send({
+          email: 'adit@mail.com',
+          password: '123456',
+          name: ''
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('string')
+          expect(res.body).toEqual('Invalid format input')
+          // expect(typeof res.body.id).toEqual('number')
+          // expect(res.body.id).toEqual(id)
+          // expect(res.body).toHaveProperty('email')
+          // expect(typeof res.body.email).toEqual('string')
+          // expect(res.body.email).toEqual(email)
+          // expect(res.body).toHaveProperty('access_token')
+          // expect(typeof res.body.access_token).toEqual('string')
+          done()
+        })
+    })
+  })
+})
