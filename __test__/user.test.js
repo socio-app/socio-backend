@@ -307,7 +307,51 @@ describe('PATCH /users/:id/missionUpdate', function () {
 })
 
 //punyanya Mukti:
+describe('PATCH /users/:id/dailyReset', function () {
+  //=====SUCCESSFUL=====
+  describe('Successful PATCH /users/:id/dailyReset', function () {
+    it('should return status 200 with data', function (done) {
+      const missions = [
+        {
+          _id: 1, 
+          name: "mission 1",
+          exp: 3,
+          isTaken: false
+        },
+        {
+          _id: 2, 
+          name: "mission 2",
+          exp: 7,
+          isTaken: false
+        }
+      ]
 
+      request(app)
+        .patch('/users/:id/dailyReset')
+        .set({
+          
+        })
+        .send({
+          activeMissions: [],
+          missionPool: missions,
+          lastOnline: new Date()
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at PATCH /users/:id/dailyReset test')
+          }
+          expect(res.status).toEqual(200)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('activeMissions')
+          expect(typeof res.body.activeMissions).toEqual('object')
+          expect(res.body).toHaveProperty('missionPool')
+          expect(typeof res.body.missionPool).toEqual('object')
+          expect(res.body).toHaveProperty('lastOnline')
+          done()
+        })
+    })
+  })
+})
 //punyanya Amil:
 //===== SUCCESSFUL =====
 describe(`GET /users/${id}`, function() {
