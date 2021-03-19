@@ -12,6 +12,7 @@ beforeAll(() => {
     email: "usertest@mail.com"
   })
 })
+
 //==========LOGIN TEST==========
 describe('POST /login', function () {
   //=====SUCCESSFUL=====
@@ -308,6 +309,173 @@ describe('PATCH /users/:id/missionUpdate', function () {
 //punyanya Mukti:
 
 //punyanya Amil:
+//===== SUCCESSFUL =====
+describe(`GET /users/${id}`, function() {
+  it(`Success get users by id with status 200`, function(done) {
+    request(app)
+      .get(`/users/${id}`)
+      .set(`access_token`, access_token)
+      .end((err, res) => {
+        if (err) {
+          console.log('Error occured at GET UserById test')
+          done(err)
+        }
+
+        expect(res.status).toEqual(200)
+        expect(res.body).toHaveProperty('access_token', expect.any(String))
+        expect(res.body).toHaveProperty('email', res.body.email)
+        expect(typeof res.body).toEqual('object')
+        expect(typeof res.body.access_token).toEqual('string')
+        expect(typeof res.body.email).toEqual('string')
+        done()
+      })
+  })
+  //===== FAILED =====
+  it(`Failed to get user by id where there is no access_token with status 404`, function(done) {
+    request(app)
+      .get(`/users/${id}`)
+      // .set(`access_token`, access_token)
+      .end((err, res) => {
+        if (err) {
+          console.log('Error occured at GET UserById test')
+          done(err)
+        }
+
+        expect(res.status).toEqual(404)
+        expect(res.body).toHaveProperty('message')
+        expect(res.body.message).toBe('Invalid Access Token')
+        expect(typeof res.body).toEqual('object')
+        done()
+      })
+  })
+})
+// /users/:id/expIncrease,statistic, experience
+//===== SUCCESSFUL =====
+describe(`PATCH /users/${id}/expIncrease`, function() {
+  it(`Success update data with status 200`, function(done) {
+    let data = {
+      statistic: {
+        totalSuccessMission: 2,
+        totalFailedMissions: 1,
+        totalMissions: 1,
+        totalPlayedDays: 10
+      },
+      currentExperience: 20
+    }
+    request(app)
+      .patch(`users/${id}/expIncrease`)
+      .send(data)
+      .set(`access_token`, access_token)
+      .end((err, res) => {
+        if (err) {
+          console.log('Error occured at PATCH users expIncrease test')
+          done(err)
+        }
+
+        expect(res.status).toEqual(200)
+        expect(res.body).toHaveProperty('statistic')
+        expect(res.body).toHaveProperty('currentExperience')
+        expect(typeof res.body).toEqual('object')
+        expect(typeof res.body.statistic).toEqual('object')
+        expect(typeof res.body.currentExperience).toEqual('number')
+      })
+  })
+  //===== FAILED =====
+  it(`Failed update data where there is no access_token with status 404`, function(done) {
+    let data = {
+      statistic: {
+        totalSuccessMission: 2,
+        totalFailedMissions: 1,
+        totalMissions: 1,
+        totalPlayedDays: 10
+      },
+      currentExperience: 20
+    }
+    request(app)
+      .patch(`users/${id}/expIncrease`)
+      .send(data)
+      // .set(`access_token`, access_token)
+      .end((err, res) => {
+        if (err) {
+          console.log('Error occured at PATCH users expIncrease test')
+          done(err)
+        }
+
+        expect(res.status).toEqual(404)
+        expect(res.body).toHaveProperty('message')
+        expect(res.body.message).toBe('Invalid Access Token')
+        expect(typeof res.body).toEqual('object')
+        done()
+      })
+  })
+  //===== FAILED =====
+  it(`Failed to Update data, one of the fields is empty, return 400`, function(done) {
+    let data = {
+      statistic: {
+        totalSuccessMission: '',
+        totalFailedMissions: '',
+        totalMissions: '',
+        totalPlayedDays: 10
+      },
+      currentExperience: ''
+    }
+    request(app)
+      .patch(`users/${id}/expIncrease`)
+      .send(data)
+      .set(`access_token`, access_token)
+      .end((err, res) => {
+        if (err) {
+          console.log('Error occured at PATCH users expIncrease test')
+          done(err)
+        }
+
+        expect(res.status).toEqual(400)
+        expect(res.body).toHaveProperty('message')
+        expect(res.body).toHaveProperty('message', expect.any(Array))
+        expect(res.body.message).toBe([
+          'statistic.totalSuccesMission is empty',
+          'statistic.totalFailedMission is empty',
+          'statistic.totalMission is empty',
+          'currentExperience is empty'
+        ])
+        expect(res.body.message.length).toBeGreaterThan(0)
+        expect(typeof res.body).toEqual('object')
+        done()
+      })
+  })
+  //===== FAILED =====
+  it(`Failed to Update Data with DataTypes for property/key with not number return status 400`, function(done) {
+    let data = {
+      statistic: {
+        totalSuccessMission: 20,
+        totalFailedMissions: 10,
+        totalMissions: 'lala',
+        totalPlayedDays: 10
+      },
+      currentExperience: 'testfailed'
+    }
+    request(app)
+      .patch(`users/${id}/expIncrease`)
+      .send(data)
+      .set(`access_token`, access_token)
+      .end((err, res) => {
+        if (err) {
+          console.log('Error occured at PATCH users expIncrease test')
+          done(err)
+        }
+
+        expect(res.status).toEqual(400)
+        expect(res.body).toHaveProperty('message')
+        expect(res.body).toHaveProperty('message', expect.any(Array))
+        expect(res.body.message).toBe([
+          'currentExperience is empty'
+        ])
+        expect(res.body.message.length).toBeGreaterThan(0)
+        expect(typeof res.body).toEqual('object')
+        done()
+      })
+  })
+})
 
 //punyanya Adit:
 describe('POST /register', function () {
