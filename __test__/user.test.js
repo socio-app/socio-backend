@@ -14,12 +14,12 @@ beforeAll(() => {
 })
 
 //==========LOGIN TEST==========
-describe('POST /login', function () {
+describe('POST /users/login', function () {
   //=====SUCCESSFUL=====
-  describe('Successful POST /login', function () {
+  describe('Successful POST /users/login', function () {
     it('should return status 200 with data', function (done) {
       request(app)
-        .post('/login')
+        .post('/users/login')
         .send({
           email,
           password,
@@ -44,10 +44,10 @@ describe('POST /login', function () {
   })
 
   //=====FAILED=====
-  describe('Failed POST /login', function () {
+  describe('Failed POST /users/login', function () {
     it('should return status 400 with errors due to empty email', function (done) {
       request(app)
-        .post('/login')
+        .post('/users/login')
         .send({
           email: '',
           password,
@@ -71,7 +71,7 @@ describe('POST /login', function () {
 
     it('should return status 400 with errors due to wrong email', function (done) {
       request(app)
-        .post('/login')
+        .post('/users/login')
         .send({
           email: 'login@mail.com',
           password,
@@ -95,7 +95,7 @@ describe('POST /login', function () {
 
     it('should return status 400 with errors due to empty password', function (done) {
       request(app)
-        .post('/login')
+        .post('/users/login')
         .send({
           email,
           password: '',
@@ -119,7 +119,7 @@ describe('POST /login', function () {
 
     it('should return status 400 with errors due to wrong password', function (done) {
       request(app)
-        .post('/login')
+        .post('/users/login')
         .send({
           email,
           password: 'login',
@@ -143,7 +143,7 @@ describe('POST /login', function () {
 
     it('should return status 403 with errors due to login using Customer role', function (done) {
       request(app)
-        .post('/login')
+        .post('/users/login')
         .send({
           email: 'customer@mail.com',
           password: 'customer123',
@@ -523,12 +523,12 @@ describe(`PATCH /users/${id}/expIncrease`, function() {
 
 
 //punyanya Adit:
-describe('POST /register', function () {
+describe('POST /users/register', function () {
   //=====SUCCESSFUL=====
-  describe('Successful POST /register', function () {
+  describe('Successful POST /users/register', function () {
     it('should return status 201 with data', function (done) {
       request(app)
-        .post('/register')
+        .post('/users/register')
         .send({
           email: 'adit@mail.com',
           password: '123456',
@@ -542,7 +542,6 @@ describe('POST /register', function () {
           expect(typeof res.body).toEqual('object')
           expect(typeof res.body).toHaveProperty('access_token')
           expect(typeof res.body.access_token).toEqual('string')
-          expect(typeof res.body.user.user).toEqual('object')
           expect(typeof res.body.user.activeMissions).toEqual('object')
           expect(typeof res.body.user.missionPoll).toEqual('object')
           // expect(typeof res.body.id).toEqual('number')
@@ -558,10 +557,10 @@ describe('POST /register', function () {
   })
 
   // Failed
-  describe('Failed POST /register', function () {
+  describe('Failed POST /users/register', function () {
     it('should return status 400 because empty email', function (done) {
       request(app)
-        .post('/register')
+        .post('/users/register')
         .send({
           email: '',
           password: '123456',
@@ -586,7 +585,7 @@ describe('POST /register', function () {
     })
     it('should return status 400 because empty password', function (done) {
       request(app)
-        .post('/register')
+        .post('/users/register')
         .send({
           email: 'adit@mail.com',
           password: '',
@@ -611,7 +610,7 @@ describe('POST /register', function () {
     })
     it('should return status 400 because empty name', function (done) {
       request(app)
-        .post('/register')
+        .post('/users/register')
         .send({
           email: 'adit@mail.com',
           password: '123456',

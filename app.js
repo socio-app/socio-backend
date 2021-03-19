@@ -1,14 +1,21 @@
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
   require('dotenv').config()
 
+const { connect } = require('./config/mongodb')
 const express = require('express')
 const app = express()
-const port = process.env.PORT
+const port = process.env.PORT || 3000
+const routes = require('./routes/index.js')
+const errorHandler = require('./middlewares/errorHandler')
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true }))
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+app.use('/', routes)
+app.use(errorHandler)
+
+connect().then(async () => {
+  app.listen(port, () => {
+    console.log(`Socio server app listening at http://localhost:${port}`)
+  })
 })
