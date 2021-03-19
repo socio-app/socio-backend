@@ -25,6 +25,22 @@ class User {
       { returnOriginal: false }
     )
   }
+
+  static missionUpdate(payload) {
+    return getDatabase().collection('users').findOneAndUpdate(
+      {
+        _id: ObjectId(payload._id)
+      },
+      {
+        $set: {
+          statistic: payload.statistic,
+          missionPool: payload.missionPool,
+          activeMissions: payload.activeMissions
+        }
+      },
+      { returnOriginal: false }
+    )
+  }
 }
 
 module.exports = User

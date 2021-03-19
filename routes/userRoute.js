@@ -11,7 +11,7 @@ router.post('/login', UserController.login)
 router.post('/register', UserController.register)
 router.get('/:id', authentication, authorized, UserController.getUserById)
 router.patch('/:id/dailyReset', authentication, authorized, UserController.dailyReset)
-// router.patch('/:id/missionUpdate')
+router.patch('/:id/missionUpdate', authentication, authorized, UserController.missionUpdate)
 // router.patch('/:id/levelUp')
 // router.patch('/:id/expIncrease')
 
