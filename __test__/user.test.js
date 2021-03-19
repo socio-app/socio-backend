@@ -1,6 +1,17 @@
 const request = require('supertest')
 const { User, sequelize } = require('../models')
 const app = require('../app')
+const { generateToken } = require('../helpers/jwt');
+
+let id;
+let access_token;
+
+beforeAll(() => {
+  access_token = generateToken({
+    id: 1,
+    email: "usertest@mail.com"
+  })
+})
 
 //==========LOGIN TEST==========
 describe('POST /login', function () {
@@ -157,6 +168,143 @@ describe('POST /login', function () {
 })
 
 //punyanya Oki:
+//patch: /users/:id/missionUpdate
+//header: token
+//body: statistic, activeMissions, missionPool (isTaken)
+describe('PATCH /users/:id/missionUpdate', function () {
+  //=====SUCCESSFUL=====
+  describe('Successful PATCH /users/:id/missionUpdate', function () {
+    it('should return status 200 with data', function (done) {
+      request(app)
+        .patch('/users/:id/missionUpdate')
+        .set({
+          access_token,
+        })
+        .send({
+          statistic,
+          activeMissions,
+          missionPool,
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at PATCH /users/:id/missionUpdate test')
+          }
+          expect(res.status).toEqual(200)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('statistic')
+          expect(res.body).toHaveProperty('activeMissions')
+          expect(res.body).toHaveProperty('missionPool')
+          done()
+        })
+    })
+  })
+  
+  //=====FAILED=====
+  describe('Failed PATCH /users/:id/missionUpdate', function () {
+    it('should return status 400 with errors due to empty active missions', function (done) {
+      request(app)
+        .patch('/users/:id/missionUpdate')
+        .set({
+          access_token,
+        })
+        .send({
+          statistic,
+          activeMissions = [],
+          missionPool,
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST login test')
+            done(err)
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('errorCode')
+          expect(res.body.errorCode).toEqual('Validation error')
+          expect(res.body).toHaveProperty('message')
+          expect(res.body.message).toContain('Input invalid')
+          done()
+        })
+    })
+
+    it('should return status 400 with errors due to empty active missions', function (done) {
+      request(app)
+        .patch('/users/:id/missionUpdate')
+        .set({
+          access_token,
+        })
+        .send({
+          statistic = {},
+          activeMissions,
+          missionPool,
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST login test')
+            done(err)
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('errorCode')
+          expect(res.body.errorCode).toEqual('Validation error')
+          expect(res.body).toHaveProperty('message')
+          expect(res.body.message).toContain('Input invalid')
+          done()
+        })
+    })
+
+    it('should return status 400 with errors due to empty mission pool', function (done) {
+      request(app)
+        .patch('/users/:id/missionUpdate')
+        .set({
+          access_token,
+        })
+        .send({
+          statistic,
+          activeMissions = [],
+          missionPool,
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST login test')
+            done(err)
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('errorCode')
+          expect(res.body.errorCode).toEqual('Validation error')
+          expect(res.body).toHaveProperty('message')
+          expect(res.body.message).toContain('Input invalid')
+          done()
+        })
+    })
+
+    it('should return status 401 with errors due to no access_token', function (done) {
+      request(app)
+        .patch('/users/:id/missionUpdate')
+        .send({
+          statistic,
+          activeMissions,
+          missionPool,
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST products test')
+            done(err)
+          }
+          expect(res.status).toEqual(401)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('errorCode')
+          expect(typeof res.body.errorCode).toEqual('string')
+          expect(res.body.errorCode).toEqual('Unauthorized')
+          expect(res.body).toHaveProperty('message')
+          expect(typeof res.body.message).toEqual('string')
+          expect(res.body.message).toContain('Please login first')
+          done()
+        })
+    })
+  })
+})
 
 //punyanya Mukti:
 
