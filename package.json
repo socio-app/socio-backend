@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --forceExit --runInBand --verbose --collectCoverage --silent",
-    "dev": "NODE_ENV=development npx nodemon bin/http.js"
+    "test": "npx jest --detectOpenHandles --forceExit --runInBand --verbose --collectCoverage",
+    "dev": "npx nodemon -r dotenv/config bin/http.js dotenv_config_path=.env.development",
+    "prod": "npx nodemon -r dotenv/config bin/http.js dotenv_config_path=.env.production"
   },
   "repository": {
     "type": "git",
