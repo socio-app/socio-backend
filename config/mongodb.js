@@ -1,20 +1,14 @@
 const { MongoClient } = require('mongodb')
+const { DATABASE_NAME, DATABASE_URI } = require('./constants')
 
-const uri = 'mongodb://localhost:27017'
+const uri = DATABASE_URI
 const client = new MongoClient(uri, { useUnifiedTopology: true })
 let database = null
 
 async function connect() {
   try {
     await client.connect()
-    let databaseName
-    if (process.env.NODE_ENV === 'development') {
-      databaseName = 'socio_development'
-    } else if (process.env.NODE_ENV === 'test') {
-      databaseName = 'socio_test'
-    } else if (process.env.NODE_ENV === 'production') {
-      databaseName = 'socio_production'
-    }
+    let databaseName = DATABASE_NAME
     const db = client.db(databaseName)
     database = db
 
