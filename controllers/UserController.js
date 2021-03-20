@@ -9,6 +9,8 @@ class UserController {
       let { email, password } = req.body
       if (!email || !password) throw { name: 'error_400_no_email_password' }
 
+      if (typeof email !== 'string') throw { name: 'unknown error' }
+
       const user = await User.findOne(email)
 
       if (!user) {
@@ -33,6 +35,9 @@ class UserController {
   static async register(req, res, next) {
     try {
       let { name, email, password } = req.body
+      if (!email || !password || !name)
+        throw { name: 'error_400_no_email_password_name' }
+
       password = hashing(password)
 
       const foundUser = await User.findOne(email)
@@ -112,7 +117,7 @@ class UserController {
       const { _id } = req.user
       const updated = await User.resetDaily({
         _id,
-        missionPool: missions
+        missionPool: missions,
       })
       res.status(200).json({
         user: {
@@ -137,12 +142,13 @@ class UserController {
     try {
       const { _id } = req.user
       const { statistic, activeMissions, missionPool } = req.body
-      if (!statistic || !activeMissions || !missionPool) throw { name: 'error_400_body_invalid' }
+      if (!statistic || !activeMissions || !missionPool)
+        throw { name: 'error_400_body_invalid' }
       const updated = await User.missionUpdate({
         _id,
         statistic,
         activeMissions,
-        missionPool
+        missionPool,
       })
       res.status(200).json({
         user: {
@@ -166,13 +172,31 @@ class UserController {
   static async levelUp(req, res, next) {
     try {
       const { _id } = req.user
-      const { statistic, activeMissions, level, experience } = req.body
+      const {
+        statistic,
+        activeMissions,
+        level,
+        currentExperience,
+        maxActiveMissions,
+      } = req.body
+
+      if (
+        !statistic ||
+        !activeMissions ||
+        !currentExperience ||
+        !level ||
+        !maxActiveMissions
+      ) {
+        throw { name: 'error_400_body_invalid' }
+      }
+
       const updated = await User.levelUp({
         _id,
         statistic,
         activeMissions,
         level,
-        experience
+        currentExperience,
+        maxActiveMissions,
       })
       res.status(200).json({
         user: {
@@ -195,12 +219,17 @@ class UserController {
   static async expIncrease(req, res, next) {
     try {
       const { _id } = req.user
-      const { statistic, activeMissions, experience } = req.body
+      const { statistic, activeMissions, currentExperience } = req.body
+
+      if (!statistic || !activeMissions || !currentExperience) {
+        throw { name: 'error_400_body_invalid' }
+      }
+
       const updated = await User.expIncrease({
         _id,
         statistic,
         activeMissions,
-        experience
+        currentExperience,
       })
       res.status(200).json({
         user: {
