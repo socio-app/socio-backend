@@ -7,11 +7,11 @@ module.exports = (err, _, res, next) => {
   let message = 'Unexpected error.'
 
   switch (err.name) {
-    case 'error_404_todo_not_found':
+    case 'error_404_user_not_found':
       //ini contoh
       statusCode = 404
       errorCode = 'Not Found'
-      message = 'Requested todo was not found'
+      message = 'Requested user was not found'
       break
 
     case 'error_403_user_forbidden':
@@ -43,6 +43,12 @@ module.exports = (err, _, res, next) => {
       statusCode = 400
       errorCode = 'Validation error'
       message = 'Input invalid'
+      break
+
+    case 'error_400_no_email_password_name':
+      statusCode = 400
+      errorCode = 'Validation error'
+      message = 'Invalid format input'
       break
 
     default:

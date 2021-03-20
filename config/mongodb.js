@@ -1,4 +1,3 @@
-require('dotenv').config()
 const { MongoClient } = require('mongodb')
 
 const uri = 'mongodb://localhost:27017'
@@ -12,7 +11,6 @@ async function connect() {
     if (process.env.NODE_ENV === 'development') {
       databaseName = 'socio_development'
     } else if (process.env.NODE_ENV === 'test') {
-      console.log('masuk env test')
       databaseName = 'socio_test'
     } else if (process.env.NODE_ENV === 'production') {
       databaseName = 'socio_production'
@@ -30,7 +28,12 @@ function getDatabase() {
   return database
 }
 
+async function close() {
+  await client.close()
+}
+
 module.exports = {
   connect,
   getDatabase,
+  close,
 }
