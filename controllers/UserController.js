@@ -12,7 +12,7 @@ class UserController {
       const user = await User.findOne(email)
 
       if (!user) {
-        throw { name: 'error_400_no_email_password' }
+        throw { name: 'error_400_wrong_email_password' }
       }
 
       if (!compare(password, user.password)) {
@@ -24,7 +24,7 @@ class UserController {
         email: user.email,
       })
 
-      res.status(200).json({ access_token })
+      res.status(200).json({ access_token, _id: user._id })
     } catch (err) {
       next(err)
     }
@@ -114,7 +114,6 @@ class UserController {
         _id,
         missionPool: missions
       })
-      console.log(updated.value)
       res.status(200).json({
         user: {
           name: updated.value.name,
@@ -138,6 +137,7 @@ class UserController {
     try {
       const { _id } = req.user
       const { statistic, activeMissions, missionPool } = req.body
+      if (!statistic || !activeMissions || !missionPool) throw { name: 'error_400_body_invalid' }
       const updated = await User.missionUpdate({
         _id,
         statistic,

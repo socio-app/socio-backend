@@ -39,6 +39,12 @@ module.exports = (err, _, res, next) => {
       message = 'Wrong email or password'
       break
 
+    case 'error_400_body_invalid':
+      statusCode = 400
+      errorCode = 'Validation error'
+      message = 'Input invalid'
+      break
+
     default:
       break
   }

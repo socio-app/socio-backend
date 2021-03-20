@@ -12,6 +12,7 @@ async function connect() {
     if (process.env.NODE_ENV === 'development') {
       databaseName = 'socio_development'
     } else if (process.env.NODE_ENV === 'test') {
+      console.log('masuk env test')
       databaseName = 'socio_test'
     } else if (process.env.NODE_ENV === 'production') {
       databaseName = 'socio_production'
