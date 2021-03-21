@@ -1,7 +1,7 @@
 module.exports = (err, _, res, next) => {
-  console.log(err, '<<<<<<<:ERROR MASUK')
-  console.log(err.name, '<<<<<<:ERROR NAME')
-  console.log(err.message, '<<<<<<<:ERROR MSG')
+  // console.log(err, '<<<<<<<:ERROR MASUK')
+  // console.log(err.name, '<<<<<<:ERROR NAME')
+  // console.log(err.message, '<<<<<<<:ERROR MSG')
   let statusCode = 500
   let errorCode = 'Internal server error'
   let message = 'Unexpected error.'

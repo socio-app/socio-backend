@@ -155,7 +155,7 @@ describe('POST /users/login', function () {
           expect(typeof res.body).toEqual('object')
           expect(res.body).toHaveProperty('access_token')
           expect(typeof res.body.access_token).toEqual('string')
-          id = res.body._id
+          id = res.body.user._id
           access_token = res.body.access_token
           console.log(id, 'from login')
           console.log(access_token, 'from login')

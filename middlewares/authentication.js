@@ -10,6 +10,7 @@ const authentication = async (req, res, next) => {
     if (!decoded) throw { name: 'error_401_invalid_token' }
     const user = await User.findOne(decoded.email)
     if (!user) throw { name: 'error_404_user_not_found' }
+    console.log(user, '<<<<<<<<<<<<<< From auth')
     req.user = user
     next()
   } catch (err) {
