@@ -26,7 +26,21 @@ class UserController {
         email: user.email,
       })
 
-      res.status(200).json({ access_token, _id: user._id })
+      res.status(200).json({
+        access_token,
+        user: {
+          name: user.name,
+          statistic: user.statistic,
+          level: user.level,
+          currentExperience: user.currentExperience,
+          activeMissions: user.activeMissions,
+          missionPool: user.missionPool,
+          maxActiveMissions: user.maxActiveMissions,
+          photo: user.photo,
+          lastOnline: user.lastOnline,
+          createdAt: user.createdAt,
+        },
+      })
     } catch (err) {
       next(err)
     }
@@ -68,6 +82,8 @@ class UserController {
         _id: ops[0]._id,
         email: ops[0].email,
       })
+
+      console.log(access_token, ops[0], 'Created new user')
 
       res.status(201).json({
         access_token,
