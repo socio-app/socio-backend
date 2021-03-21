@@ -39,6 +39,7 @@ class UserController {
           photo: user.photo,
           lastOnline: user.lastOnline,
           createdAt: user.createdAt,
+          _id: user._id,
         },
       })
     } catch (err) {
@@ -98,6 +99,7 @@ class UserController {
           photo: ops[0].photo,
           lastOnline: ops[0].lastOnline,
           createdAt: ops[0].createdAt,
+          _id: ops[0]._id,
         },
       })
     } catch (err) {
@@ -120,6 +122,7 @@ class UserController {
           photo: user.photo,
           lastOnline: user.lastOnline,
           createdAt: user.createdAt,
+          _id: user._id,
         },
       })
     } catch (err) {
@@ -147,6 +150,7 @@ class UserController {
           photo: updated.value.photo,
           lastOnline: updated.value.lastOnline,
           createdAt: updated.value.createdAt,
+          _id: updated.value._id,
         },
       })
     } catch (err) {
@@ -178,6 +182,7 @@ class UserController {
           photo: updated.value.photo,
           lastOnline: updated.value.lastOnline,
           createdAt: updated.value.createdAt,
+          _id: updated.value._id,
         },
       })
     } catch (err) {
@@ -226,6 +231,7 @@ class UserController {
           photo: updated.value.photo,
           lastOnline: updated.value.lastOnline,
           createdAt: updated.value.createdAt,
+          _id: updated.value._id,
         },
       })
     } catch (err) {
@@ -259,6 +265,7 @@ class UserController {
           photo: updated.value.photo,
           lastOnline: updated.value.lastOnline,
           createdAt: updated.value.createdAt,
+          _id: updated.value._id,
         },
       })
     } catch (err) {
