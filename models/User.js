@@ -56,7 +56,7 @@ class User {
         {
           $set: {
             statistic: payload.statistic,
-            currentExperience: payload.experience,
+            currentExperience: payload.currentExperience,
             level: payload.level,
             activeMissions: payload.activeMissions,
             maxActiveMissions: payload.maxActiveMissions,
@@ -75,7 +75,7 @@ class User {
         {
           $set: {
             statistic: payload.statistic,
-            currentExperience: payload.experience,
+            currentExperience: payload.currentExperience,
             activeMissions: payload.activeMissions,
           },
         },

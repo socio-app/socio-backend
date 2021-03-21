@@ -44,7 +44,6 @@ afterAll(async () => {
   await close()
 })
 
-//punyanya Adit:
 describe('POST /users/register', function () {
   //=====SUCCESSFUL=====
   describe('Successful POST /users/register', function () {
@@ -133,6 +132,28 @@ describe('POST /users/register', function () {
           done()
         })
     })
+
+    it('should return status 400 because duplicate email', function (done) {
+      request(app)
+        .post('/users/register')
+        .send({
+          email: 'adit@mail.com',
+          password: '123456',
+          name: 'adits',
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body).toHaveProperty('errorCode')
+          expect(res.body.errorCode).toEqual('Validation error')
+          expect(res.body).toHaveProperty('message')
+          expect(res.body.message).toEqual('This email has been registered')
+          done()
+        })
+    })
   })
 })
 
@@ -159,12 +180,6 @@ describe('POST /users/login', function () {
           access_token = res.body.access_token
           console.log(id, 'from login')
           console.log(access_token, 'from login')
-          // expect(res.body.id).toEqual(id)
-          // expect(res.body).toHaveProperty('email')
-          // expect(typeof res.body.email).toEqual('string')
-          // expect(res.body.email).toEqual(email)
-          // expect(res.body).toHaveProperty('access_token')
-          // expect(typeof res.body.access_token).toEqual('string')
           done()
         })
     })
@@ -294,10 +309,6 @@ describe('POST /users/login', function () {
   })
 })
 
-//punyanya Oki:
-//patch: /users/:id/missionUpdate
-//header: token
-//body: statistic, activeMissions, missionPool (isTaken)
 describe('PATCH /users/:id/missionUpdate', function () {
   //=====SUCCESSFUL=====
   describe('Successful PATCH /users/:id/missionUpdate', function () {
@@ -461,7 +472,6 @@ describe('PATCH /users/:id/missionUpdate', function () {
   })
 })
 
-// //punyanya Mukti:
 describe('PATCH /users/:id/dailyReset', function () {
   //=====SUCCESSFUL=====
   describe('Successful PATCH /users/:id/dailyReset', function () {
@@ -510,8 +520,7 @@ describe('PATCH /users/:id/dailyReset', function () {
   })
 })
 
-// //punyanya Amil:
-// //===== SUCCESSFUL =====
+//===== SUCCESSFUL =====
 describe(`GET /users/${id}`, function () {
   it(`Success get users by id with status 200`, function (done) {
     request(app)
@@ -599,27 +608,10 @@ describe(`GET /users/${id}`, function () {
         done()
       })
   })
-
-  // it(`Failed 500?`, function (done) {
-  //   request(app)
-  //     .get(`/users/123123123`)
-  //     .set({
-  //       access_token,
-  //     })
-  //     .end((err, res) => {
-  //       if (err) {
-  //         console.log('Error occured at GET UserById test')
-  //         done(err)
-  //       }
-
-  //       expect(res.status).toEqual(500)
-  //       done()
-  //     })
-  // })
 })
-// /users/:id/expIncrease,statistic, experience
+
 //===== SUCCESSFUL =====
-describe(`PATCH /users/${id}/expIncrease`, function () {
+describe(`PATCH /users/:id/expIncrease`, function () {
   it(`Success update data with status 200`, function (done) {
     let data = {
       statistic: {
@@ -672,7 +664,6 @@ describe(`PATCH /users/${id}/expIncrease`, function () {
     request(app)
       .patch(`/users/${id}/expIncrease`)
       .send(data)
-      // .set(`access_token`, access_token)
       .end((err, res) => {
         if (err) {
           console.log('Error occured at PATCH users expIncrease test')
@@ -718,7 +709,6 @@ describe(`PATCH /users/${id}/expIncrease`, function () {
   })
 })
 
-//   // Failed/punyanya Adit:
 describe('PATCH /users/:id/levelUp', function () {
   //=====SUCCESSFUL=====
   describe('Successful PATCH /users/:id/levelUp', function () {
@@ -807,7 +797,6 @@ describe('PATCH /users/:id/levelUp', function () {
       request(app)
         .patch(`/users/${id}/levelUp`)
         .send(data)
-        // .set(`access_token`, access_token)
         .end((err, res) => {
           if (err) {
             console.log('Error occured at PATCH users expIncrease test')

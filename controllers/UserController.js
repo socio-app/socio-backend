@@ -7,16 +7,14 @@ class UserController {
   static async login(req, res, next) {
     try {
       let { email, password } = req.body
-      if (!email || !password) throw { name: 'error_400_no_email_password' }
 
+      if (!email || !password) throw { name: 'error_400_no_email_password' }
       if (typeof email !== 'string') throw { name: 'unknown error' }
 
       const user = await User.findOne(email)
-
       if (!user) {
         throw { name: 'error_400_wrong_email_password' }
       }
-
       if (!compare(password, user.password)) {
         throw { name: 'error_400_wrong_email_password' }
       }
@@ -26,6 +24,7 @@ class UserController {
         email: user.email,
       })
 
+      console.log({ access_token }, { user }, 'Login user')
       res.status(200).json({
         access_token,
         user: {
@@ -50,13 +49,16 @@ class UserController {
   static async register(req, res, next) {
     try {
       let { name, email, password } = req.body
-      if (!email || !password || !name)
-        throw { name: 'error_400_no_email_password_name' }
 
+      if (!email || !password || !name) {
+        throw { name: 'error_400_no_email_password_name' }
+      }
       password = hashing(password)
 
       const foundUser = await User.findOne(email)
       if (foundUser) throw { name: 'error_400_email_is_used' }
+
+      const missions = await Mission.findAll()
 
       let input = {
         email,
@@ -71,10 +73,10 @@ class UserController {
         level: 1,
         currentExperience: 0,
         activeMissions: [],
-        missionPool: [],
+        missionPool: [...missions],
         maxActiveMissions: 2,
         photo:
-          'https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light',
+          'https://png.pngtree.com/png-clipart/20190924/original/pngtree-user-vector-avatar-png-image_4830521.jpg',
         lastOnline: new Date(),
         createdAt: new Date(),
       }
@@ -84,8 +86,7 @@ class UserController {
         email: ops[0].email,
       })
 
-      console.log(access_token, ops[0], 'Created new user')
-
+      console.log({ access_token }, { user: ops[0] }, 'Created new user')
       res.status(201).json({
         access_token,
         user: {
@@ -110,6 +111,8 @@ class UserController {
   static async getUserById(req, res, next) {
     try {
       const user = req.user
+
+      console.log({ _id: user._id }, 'Fetching single user')
       res.status(200).json({
         user: {
           name: user.name,
@@ -138,6 +141,8 @@ class UserController {
         _id,
         missionPool: missions,
       })
+
+      console.log({ _id }, 'Daily reset mission for user')
       res.status(200).json({
         user: {
           name: updated.value.name,
@@ -162,14 +167,18 @@ class UserController {
     try {
       const { _id } = req.user
       const { statistic, activeMissions, missionPool } = req.body
+
       if (!statistic || !activeMissions || !missionPool)
         throw { name: 'error_400_body_invalid' }
+
       const updated = await User.missionUpdate({
         _id,
         statistic,
         activeMissions,
         missionPool,
       })
+
+      console.log({ _id }, 'Mission update for user')
       res.status(200).json({
         user: {
           name: updated.value.name,
@@ -204,7 +213,7 @@ class UserController {
       if (
         !statistic ||
         !activeMissions ||
-        !currentExperience ||
+        currentExperience === null ||
         !level ||
         !maxActiveMissions
       ) {
@@ -219,6 +228,8 @@ class UserController {
         currentExperience,
         maxActiveMissions,
       })
+
+      console.log({ _id }, 'Level up user')
       res.status(200).json({
         user: {
           name: updated.value.name,
@@ -238,12 +249,12 @@ class UserController {
       next(err)
     }
   }
+
   static async expIncrease(req, res, next) {
     try {
       const { _id } = req.user
       const { statistic, activeMissions, currentExperience } = req.body
-
-      if (!statistic || !activeMissions || !currentExperience) {
+      if (!statistic || !activeMissions || currentExperience === null) {
         throw { name: 'error_400_body_invalid' }
       }
 
@@ -253,6 +264,8 @@ class UserController {
         activeMissions,
         currentExperience,
       })
+
+      console.log({ _id }, 'Exp increase user')
       res.status(200).json({
         user: {
           name: updated.value.name,
