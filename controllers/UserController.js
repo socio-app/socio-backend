@@ -201,6 +201,7 @@ class UserController {
 
   static async levelUp(req, res, next) {
     try {
+      console.log(req.files, 'REQ FILES')
       const { _id } = req.user
       const {
         statistic,
@@ -208,7 +209,8 @@ class UserController {
         level,
         currentExperience,
         maxActiveMissions,
-      } = req.body
+        activeMission_Id,
+      } = JSON.parse(req.body.userData)
 
       if (
         !statistic ||
@@ -219,6 +221,12 @@ class UserController {
       ) {
         throw { name: 'error_400_body_invalid' }
       }
+
+      activeMissions.forEach((el) => {
+        if (el._id === activeMission_Id) {
+          el.imageUri = req.files[0].location
+        }
+      })
 
       const updated = await User.levelUp({
         _id,
@@ -270,8 +278,6 @@ class UserController {
           el.imageUri = req.files[0].location
         }
       })
-
-      console.log(activeMissions)
 
       const updated = await User.expIncrease({
         _id,

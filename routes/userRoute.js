@@ -23,7 +23,13 @@ router.patch(
   authorized,
   UserController.missionUpdate
 )
-router.patch('/:id/levelUp', authentication, authorized, UserController.levelUp)
+router.patch(
+  '/:id/levelUp',
+  upload,
+  authentication,
+  authorized,
+  UserController.levelUp
+)
 router.patch(
   '/:id/expIncrease',
   upload,
