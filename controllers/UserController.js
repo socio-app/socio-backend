@@ -252,11 +252,26 @@ class UserController {
 
   static async expIncrease(req, res, next) {
     try {
+      console.log(req.files, 'REQ FILES')
       const { _id } = req.user
-      const { statistic, activeMissions, currentExperience } = req.body
+      const {
+        statistic,
+        activeMissions,
+        currentExperience,
+        activeMission_Id,
+      } = JSON.parse(req.body.userData)
+
       if (!statistic || !activeMissions || currentExperience === null) {
         throw { name: 'error_400_body_invalid' }
       }
+
+      activeMissions.forEach((el) => {
+        if (el._id === activeMission_Id) {
+          el.imageUri = req.files[0].location
+        }
+      })
+
+      console.log(activeMissions)
 
       const updated = await User.expIncrease({
         _id,
