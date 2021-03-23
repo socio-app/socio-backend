@@ -201,7 +201,7 @@ class UserController {
 
   static async levelUp(req, res, next) {
     try {
-      console.log(req.files, 'REQ FILES')
+      console.log(req.files, 'REQ FILES LEVELUP')
       const { _id } = req.user
       const {
         statistic,
@@ -260,7 +260,8 @@ class UserController {
 
   static async expIncrease(req, res, next) {
     try {
-      console.log(req.files, 'REQ FILES')
+      console.log(req.files, 'REQ FILES EXPINCREASE')
+      console.log(req.body, '<<< Req body increase')
       const { _id } = req.user
       const {
         statistic,
