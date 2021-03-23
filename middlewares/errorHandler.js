@@ -13,6 +13,12 @@ module.exports = (err, req, res, next) => {
       message = 'Requested user was not found'
       break
 
+    case 'error_404_not_found':
+      statusCode = 404
+      errorCode = 'Not Found'
+      message = 'Data not found'
+      break
+
     case 'error_403_user_forbidden':
       statusCode = 403
       errorCode = 'Forbidden access'
