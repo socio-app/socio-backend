@@ -6,7 +6,6 @@ class Mission {
     return getDatabase().collection('missions').find().toArray()
   }
   static findById(_id) {
-    console.log('masuk model')
     return getDatabase().collection('missions').findOne({ _id: ObjectId(_id) })
   }
   static insert(payload) {

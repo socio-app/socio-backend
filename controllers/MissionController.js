@@ -5,11 +5,12 @@ class MissionController {
     try {
       const { title, experience, description, contributor } = req.body
       if (!title || !experience || !description || !contributor) throw { name: 'error_400_body_invalid' }
-      await Mission.insert({
+      const mission = await Mission.insert({
         title, experience, description,
         contributor, isTaken: false
       })
-      res.status(201).json('Added mission successfully')
+      console.log(mission.ops[0], 'dari controller')
+      res.status(201).json(mission.ops[0])
     } catch (err) {
       next(err)
     }
@@ -18,6 +19,15 @@ class MissionController {
   static async readMission(req, res, next) {
     try {
       const mission = await Mission.findAll()
+      res.status(200).json(mission)
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  static async getMissionById(req, res, next) {
+    try {
+      const mission = await Mission.findById(req.params._id)
       res.status(200).json(mission)
     } catch (err) {
       next(err)

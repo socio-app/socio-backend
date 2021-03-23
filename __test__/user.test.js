@@ -1,7 +1,7 @@
 const request = require('supertest')
 const app = require('../app')
 const { getDatabase, connect, close } = require('../config/mongodb.js')
-// const filePath = `${__dirname}/__test__/image.png`
+
 
 let id
 let access_token
@@ -631,7 +631,7 @@ describe(`PATCH /users/:id/expIncrease`, function () {
     request(app)
       .patch(`/users/${id}/expIncrease`)
       .field('userData', JSON.stringify(data))
-      .attach('newImage', './__test__/image1.png')
+      .attach('newImage', './__test__/image1.jpg')
       .set({ access_token })
       .end((err, res) => {
         if (err) {
@@ -646,7 +646,7 @@ describe(`PATCH /users/:id/expIncrease`, function () {
         // expect(res.body.user).toHaveProperty('currentExperience')
         done()
       })
-  })
+  }, 60000)
   // ===== FAILED =====
   it(`Failed update data where there is no access_token with status 404`, function (done) {
     let data = {
@@ -666,7 +666,7 @@ describe(`PATCH /users/:id/expIncrease`, function () {
     request(app)
       .patch(`/users/${id}/expIncrease`)
       .field('userData', JSON.stringify(data))
-      .attach('newImage', './__test__/image1.png')
+      .attach('newImage', './__test__/image1.jpg')
       .end((err, res) => {
         if (err) {
           console.log('Error occured at PATCH users expIncrease test')
@@ -683,7 +683,7 @@ describe(`PATCH /users/:id/expIncrease`, function () {
         // expect(res.body.message).toContain('Please login first')
         done()
       })
-  })
+  }, 60000)
   // //===== FAILED =====
   it(`Failed to Update data, one of the fields is empty, return 400`, function (done) {
     let data = {
@@ -694,7 +694,7 @@ describe(`PATCH /users/:id/expIncrease`, function () {
     request(app)
       .patch(`/users/${id}/expIncrease`)
       .field('userData', JSON.stringify(data))
-      .attach('newImage', './__test__/image1.png')
+      .attach('newImage', './__test__/image1.jpg')
       .set(`access_token`, access_token)
       .end((err, res) => {
         if (err) {
@@ -710,7 +710,7 @@ describe(`PATCH /users/:id/expIncrease`, function () {
         expect(res.body.message).toContain('Input invalid')
         done()
       })
-  })
+  }, 60000)
 })
 
 describe('PATCH /users/:id/levelUp', function () {
@@ -736,7 +736,7 @@ describe('PATCH /users/:id/levelUp', function () {
       request(app)
         .patch(`/users/${id}/levelUp`)
         .field('userData', JSON.stringify(data))
-        .attach('newImage', './__test__/image1.png')
+        .attach('newImage', './__test__/image1.jpg')
         .set({
           access_token,
         })
@@ -755,7 +755,7 @@ describe('PATCH /users/:id/levelUp', function () {
           done()
         })
     })
-  })
+  }, 60000)
 
   // Failed
   describe('Failed PATCH /users/:id/levelUp', function () {
@@ -769,7 +769,7 @@ describe('PATCH /users/:id/levelUp', function () {
       request(app)
         .patch(`/users/${id}/levelUp`)
         .field('userData', JSON.stringify(data))
-        .attach('newImage', './__test__/image1.png')
+        .attach('newImage', './__test__/image1.jpg')
         .set({ access_token })
         .end((err, res) => {
           if (err) {
@@ -783,7 +783,7 @@ describe('PATCH /users/:id/levelUp', function () {
           expect(res.body.message).toContain('Input invalid')
           done()
         })
-    })
+    }, 60000)
 
     it(`Failed update data where there is no access_token with status 404`, function (done) {
       let data = {
