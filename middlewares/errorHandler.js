@@ -53,7 +53,6 @@ module.exports = (err, req, res, next) => {
       statusCode = 400
       errorCode = 'Validation error'
       message = 'Input invalid'
-      console.log(req.body)
       break
 
     case 'error_400_no_email_password_name':
