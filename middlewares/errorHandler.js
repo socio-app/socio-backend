@@ -36,6 +36,18 @@ module.exports = (err, req, res, next) => {
       errorCode = 'Validation error'
       message = 'Please enter email and password'
       break
+    
+    case 'error_400_email_format_wrong':
+      statusCode = 400
+      errorCode = 'Validation error'
+      message = 'Email Format Wrong'
+      break
+    
+    case 'error_400_password_must_have_8_characters':
+      statusCode = 400
+      errorCode = 'Validation error'
+      message = 'Password Must Have 8 Chareacters or More'
+      break
 
     case 'error_400_email_is_used':
       statusCode = 400
