@@ -4,10 +4,14 @@ class MissionController {
   static async addMission(req, res, next) {
     try {
       const { title, experience, description, contributor } = req.body
-      if (!title || !experience || !description || !contributor) throw { name: 'error_400_body_invalid' }
+      if (!title || !experience || !description || !contributor)
+        throw { name: 'error_400_body_invalid' }
       const mission = await Mission.insert({
-        title, experience, description,
-        contributor, isTaken: false
+        title,
+        experience,
+        description,
+        contributor,
+        isTaken: false,
       })
       console.log(mission.ops[0], 'dari controller')
       res.status(201).json(mission.ops[0])
@@ -36,14 +40,20 @@ class MissionController {
 
   static async updateMission(req, res, next) {
     try {
-      if (!req.body.title || !req.body.experience || !req.body.description || !req.body.contributor) throw { name: 'error_400_body_invalid' }
+      if (
+        !req.body.title ||
+        !req.body.experience ||
+        !req.body.description ||
+        !req.body.contributor
+      )
+        throw { name: 'error_400_body_invalid' }
       await Mission.update({
         _id: req.params._id,
         title: req.body.title,
         experience: req.body.experience,
         description: req.body.description,
         contributor: req.body.contributor,
-        isTaken: false
+        isTaken: false,
       })
       res.status(200).json('Updated mission successfully')
     } catch (err) {
