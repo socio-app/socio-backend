@@ -11,6 +11,7 @@ class MissionController {
         experience,
         description,
         contributor,
+        status: false,
         isTaken: false,
       })
       console.log(mission.ops[0], 'dari controller')
@@ -22,7 +23,7 @@ class MissionController {
 
   static async readMission(req, res, next) {
     try {
-      const mission = await Mission.findAll()
+      const mission = await Mission.find()
       res.status(200).json(mission)
     } catch (err) {
       next(err)
@@ -53,6 +54,7 @@ class MissionController {
         experience: req.body.experience,
         description: req.body.description,
         contributor: req.body.contributor,
+        status: req.body.status,
         isTaken: false,
       })
       res.status(200).json('Updated mission successfully')

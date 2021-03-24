@@ -2,8 +2,12 @@ const { ObjectId } = require('mongodb');
 const { getDatabase } = require('../config/mongodb')
 
 class Mission {
-  static findAll() {
+  static find() {
     return getDatabase().collection('missions').find().toArray()
+  }
+
+  static findAll() {
+    return getDatabase().collection('missions').find({status: true}).toArray()
   }
   static findById(_id) {
     return getDatabase().collection('missions').findOne({ _id: ObjectId(_id) })
@@ -19,6 +23,7 @@ class Mission {
         experience: payload.experience,
         description: payload.description,
         contributor: payload.contributor,
+        status: payload.status,
         isTaken: payload.isTaken
       },
     }
