@@ -53,7 +53,16 @@ class UserController {
       if (!email || !password || !name) {
         throw { name: 'error_400_no_email_password_name' }
       }
-      password = hashing(password)
+
+      if (!(email.split("@")[0].length > 0 && email.includes("@") && email.includes(".co"))) {
+        throw { name: 'error_400_email_format_wrong'}
+      }
+
+      if (password.length < 8 ) {
+        throw { name: 'error_400_password_must_have_8_characters'}
+      } else {
+        password = hashing(password)
+      }
 
       const foundUser = await User.findOne(email)
       if (foundUser) throw { name: 'error_400_email_is_used' }

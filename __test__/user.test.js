@@ -9,7 +9,7 @@ let newUser
 let id2
 
 let email = 'adit@mail.com'
-let password = '123456'
+let password = '12345678'
 let name = 'Adit'
 
 beforeAll(async () => {
@@ -73,12 +73,48 @@ describe('POST /users/register', function () {
 
   // Failed
   describe('Failed POST /users/register', function () {
+    it('should return status 400 because email format wrong', function (done) {
+      request(app)
+        .post('/users/register')
+        .send({
+          email: 'qwerty',
+          password: '12345678',
+          name: 'Adit',
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body.message).toEqual('Email Format Wrong')
+          done()
+        })
+    })
+    it('should return status 400 because password is not 8 chareacter or more', function (done) {
+      request(app)
+        .post('/users/register')
+        .send({
+          email: 'adit@mail.com',
+          password: '1234',
+          name: 'Adit',
+        })
+        .end((err, res) => {
+          if (err) {
+            console.log('Error occured at POST register test')
+          }
+          expect(res.status).toEqual(400)
+          expect(typeof res.body).toEqual('object')
+          expect(res.body.message).toEqual('Password Must Have 8 Chareacters or More')
+          done()
+        })
+    })
     it('should return status 400 because empty email', function (done) {
       request(app)
         .post('/users/register')
         .send({
           email: '',
-          password: '123456',
+          password: '12345678',
           name: 'Adit',
         })
         .end((err, res) => {
@@ -117,7 +153,7 @@ describe('POST /users/register', function () {
         .post('/users/register')
         .send({
           email: 'adit@mail.com',
-          password: '123456',
+          password: '12345678',
           name: '',
         })
         .end((err, res) => {
@@ -139,7 +175,7 @@ describe('POST /users/register', function () {
         .post('/users/register')
         .send({
           email: 'adit@mail.com',
-          password: '123456',
+          password: '12345678',
           name: 'adits',
         })
         .end((err, res) => {
@@ -167,7 +203,7 @@ describe('POST /users/login', function () {
         .post('/users/login')
         .send({
           email: 'adit@mail.com',
-          password: '123456',
+          password: '12345678',
         })
         .end((err, res) => {
           if (err) {
@@ -193,7 +229,7 @@ describe('POST /users/login', function () {
         .post('/users/login')
         .send({
           email: '',
-          password: '123456',
+          password: '12345678',
         })
         .end((err, res) => {
           if (err) {
@@ -217,7 +253,7 @@ describe('POST /users/login', function () {
         .post('/users/login')
         .send({
           email: 123123,
-          password: '123456',
+          password: '12345678',
         })
         .end((err, res) => {
           if (err) {
@@ -241,7 +277,7 @@ describe('POST /users/login', function () {
         .post('/users/login')
         .send({
           email: 'login@mail.com',
-          password: '123456',
+          password: '12345678',
         })
         .end((err, res) => {
           if (err) {
